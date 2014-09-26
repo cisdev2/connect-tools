@@ -4,7 +4,7 @@ Makes some improvements to the grade center.
 
 ##Installation
 
-Create a new bookmark for your browser and paste the contents of [this file](sources/megaview.bookmark) in the bookmark's URL.
+Create a new bookmark for your browser and paste the contents of [this file](https://raw.githubusercontent.com/gondek/connect-tools/master/sources/megaview.bookmark) in the bookmark's URL.
 
 ##Features
 - Stickies (holds in place) the following:
