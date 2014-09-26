@@ -2,6 +2,8 @@
 
 Makes some improvements to the grade center.
 
+For larger operations, "Work Offline" mode continues to be the better choice.
+
 ##Installation
 
 Create a new bookmark for your browser and paste the contents of [this file](https://raw.githubusercontent.com/gondek/connect-tools/master/sources/megaview.bookmark) in the bookmark's URL.
@@ -18,7 +20,7 @@ Create a new bookmark for your browser and paste the contents of [this file](htt
 ##Usage
 1. Enter any Grade Center view
 2. Click the bookmark
-3. To exit megaview
+3. To exit megaview, click the bookmark again.
 
 ##Known Issues
 
