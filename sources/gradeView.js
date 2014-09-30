@@ -18,10 +18,10 @@
     }
     
     // If we have NOT activated the script
-    if(frames[1].$('superviewinit') == null && Gradebook.getModel().minimumRows < 51) {
+    if(frames[1].$('gradeviewinit') == null && Gradebook.getModel().minimumRows < 51) {
         
         // Confirm that the user wanted to do this
-        if(!confirm('Activate megaView?')) {
+        if(!confirm('Activate gradeView?')) {
             return;
         }
         
@@ -33,7 +33,7 @@
             GCHVmessage.style.padding = "5px";
             GCHVmessage.style.color = "#000";
             GCHVmessage.style.display = "none";
-            GCHVmessage.innerHTML = 'megaView activated';
+            GCHVmessage.innerHTML = 'gradeView activated';
             frames[1].$('statusTitle').appendChild(GCHVmessage);
         }
         
@@ -69,13 +69,13 @@
         //Activate the script and mark as activated
         frames[1].theGradeCenter.reloadGrid();
         
-        GCHVmessage.id = 'superviewinit';
+        GCHVmessage.id = 'gradeviewinit';
         GCHVmessage.style.display = 'inline';
     
     // If the script is already activated
     } else {
         // Confirm that the user wanted to do this
-        if(!confirm('De-Activate megaView?')) {
+        if(!confirm('De-Activate gradeView?')) {
             return;
         }
         

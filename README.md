@@ -1,9 +1,11 @@
 # Connect Tools
-Javascript bookmarklets to help with using Blackboard Connect
+Javascript bookmarklets to help with using Blackboard Connect.
 
 ## Current Offerings
 
-- [megaview](megaview.md): Makes some improvements to the grade center.
+- [gradeView](gradeView.md): Makes user interface improvements to the grade center.
+- [releaseView](releaseView.md): Displays advanced adaptive release control details beside assessment names.
+- [groupView](groupView.md): Displays individual group members on the group overview page.
 
 ## Technical Notes
 To turn any of the source .js files into a bookmarklet:
