@@ -9,7 +9,10 @@
         var waitOnElement = frames[1].$('table1_container').children[GCHVhorizontalbarIndex];
         if(typeof waitOnElement !== "undefined" && waitOnElement.children.length > 0){
             waitOnElement.style.position='fixed';
-            waitOnElement.style.top='30px';
+            waitOnElement.style.top='86px';
+            waitOnElement.style.zIndex = '2000';
+            waitOnElement.style.left = 'auto';
+            waitOnElement.style.right = '115px';
         } else {
             setTimeout(function(){
                 GCHVwait();
@@ -59,15 +62,23 @@
             window.GCHVPreloadGridFn.apply(frames[1].theGradeCenter,arguments);
             //affix the header
             frames[1].$('table1_header').style.position='fixed';
-            frames[1].$('table1_header').style.top='0';
-            frames[1].$('table1_header').style.zIndex='100';
+            frames[1].$('table1_header').style.top='35px';
+            frames[1].$('table1_header').style.zIndex='1000';
             //affix the container
             GCHVwait();
+            
         }
-        
         
         //Activate the script and mark as activated
         frames[1].theGradeCenter.reloadGrid();
+        
+        var pcip = frames[1].$('panelcellInfoPanel').style;
+        pcip.position='fixed';
+        pcip.top='65px';
+        pcip.zIndex='1000';
+        pcip.background = '#333';
+        pcip.height = '41px';
+        pcip.width = '1153px';
         
         GCHVmessage.id = 'gradeviewinit';
         GCHVmessage.style.display = 'inline';
@@ -83,8 +94,14 @@
         Gradebook.getModel().minimumRows=window.GCHVminRows;
         Gradebook.getModel().gradebookService.updateNumFrozenColumns(2);
         frames[1].theGradeCenter.reloadGrid = window.GCHVPreloadGridFn;
+        
         frames[1].$('table1_header').style.position='static';
-        frames[1].$('table1_header').style.top='';
+        
+        var pcip = frames[1].$('panelcellInfoPanel').style;
+        pcip.position='static';
+        pcip.background = 'none';
+        pcip.height = 'auto';
+        pcip.width = 'auto';
         
         frames[1].theGradeCenter.reloadGrid();
         GCHVmessage.id = '';
