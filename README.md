@@ -1,11 +1,7 @@
 # Connect Tools
 Javascript bookmarklets to help with using Blackboard Connect.
 
-## Current Offerings
-
-- [gradeView](gradeView.md): Makes user interface improvements to the grade center.
-- [releaseView](releaseView.md): Displays advanced adaptive release control details beside assessment names.
-- [groupView](groupView.md): Displays individual group members on the group overview page.
+For more information and to install, visit: http://gondek.github.io/connect-tools
 
 ## Technical Notes
 To turn any of the source .js files into a bookmarklet:
