@@ -12,7 +12,8 @@
             waitOnElement.style.top='86px';
             waitOnElement.style.zIndex = '2000';
             waitOnElement.style.left = 'auto';
-            waitOnElement.style.right = '115px';
+            waitOnElement.style.marginLeft = '360px';
+            frames[1].$('panelcellInfoPanel').style.maxWidth = frames[1].$('table1_header').getWidth() + 'px';
         } else {
             setTimeout(function(){
                 GCHVwait();
@@ -24,7 +25,9 @@
     if(frames[1].$('gradeviewinit') == null && Gradebook.getModel().minimumRows < 51) {
         
         // Confirm that the user wanted to do this
-        if(!confirm('Activate gradeView?')) {
+        if(innerWidth < 1000 && !confirm('Warning: Your viewport/window size is less than 1000px wide. Still activate gradeView?')) {
+            return;
+        } else if(!confirm('Activate gradeView?')) {
             return;
         }
         
@@ -61,9 +64,10 @@
             // Execute the old function as normal
             window.GCHVPreloadGridFn.apply(frames[1].theGradeCenter,arguments);
             //affix the header
-            frames[1].$('table1_header').style.position='fixed';
-            frames[1].$('table1_header').style.top='35px';
-            frames[1].$('table1_header').style.zIndex='1000';
+            var tbhs = frames[1].$('table1_header').style;
+            tbhs.position='fixed';
+            tbhs.top='35px';
+            tbhs.zIndex='1000';
             //affix the container
             GCHVwait();
             
@@ -72,13 +76,16 @@
         //Activate the script and mark as activated
         frames[1].theGradeCenter.reloadGrid();
         
-        var pcip = frames[1].$('panelcellInfoPanel').style;
-        pcip.position='fixed';
-        pcip.top='65px';
-        pcip.zIndex='1000';
-        pcip.background = '#333';
-        pcip.height = '41px';
-        pcip.width = '1153px';
+        var pcip = frames[1].$('panelcellInfoPanel');
+        pcip.style.position='fixed';
+        pcip.style.top='65px';
+        pcip.style.zIndex='1000';
+        pcip.style.background = '#333';
+        pcip.style.height = '41px';
+        pcip.style.width = '1153px';
+        
+        pcip.appendChild(frames[1].$('selectedRows'));
+        frames[1].$('selectedRows').style.margin = "4px 0 0 2px";
         
         GCHVmessage.id = 'gradeviewinit';
         GCHVmessage.style.display = 'inline';
@@ -103,7 +110,13 @@
         pcip.height = 'auto';
         pcip.width = 'auto';
         
+        frames[1].$('nonAccessibleTableDiv').insert({
+          after: frames[1].$('selectedRows')
+        });
+        frames[1].$('selectedRows').style.margin = "0";
+        
         frames[1].theGradeCenter.reloadGrid();
+        
         GCHVmessage.id = '';
         GCHVmessage.style.display = 'none';
     }
