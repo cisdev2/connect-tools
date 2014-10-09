@@ -87,6 +87,30 @@
         pcip.appendChild(frames[1].$('selectedRows'));
         frames[1].$('selectedRows').style.margin = "4px 0 0 2px";
         
+        //Attach an unLoad event to avoid the glitch when coming back to the grade center
+        //this is a copy of the else case from below, but without the reloadGrid call
+        frames[1].window.addEventListener('beforeunload',function(event) {
+            Gradebook.getModel().minimumRows=window.GCHVminRows;
+            Gradebook.getModel().gradebookService.updateNumFrozenColumns(2);
+            frames[1].theGradeCenter.reloadGrid = window.GCHVPreloadGridFn;
+
+            frames[1].$('table1_header').style.position='static';
+
+            var pcip = frames[1].$('panelcellInfoPanel').style;
+            pcip.position='static';
+            pcip.background = 'none';
+            pcip.height = 'auto';
+            pcip.width = 'auto';
+
+            frames[1].$('nonAccessibleTableDiv').insert({
+              after: frames[1].$('selectedRows')
+            });
+            frames[1].$('selectedRows').style.margin = "0";
+            
+            GCHVmessage.id = '';
+            GCHVmessage.style.display = 'none';
+        });
+        
         GCHVmessage.id = 'gradeviewinit';
         GCHVmessage.style.display = 'inline';
     
