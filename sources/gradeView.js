@@ -89,7 +89,7 @@
         
         //Attach an unLoad event to avoid the glitch when coming back to the grade center
         //this is a copy of the else case from below, but without the reloadGrid call
-        frames[1].window.addEventListener('beforeunload',function(event) {
+        frames[1].window.addEventListener('unload',function(event) {
             Gradebook.getModel().minimumRows=window.GCHVminRows;
             Gradebook.getModel().gradebookService.updateNumFrozenColumns(2);
             frames[1].theGradeCenter.reloadGrid = window.GCHVPreloadGridFn;
