@@ -5,6 +5,7 @@
     // window.GCHVhorizontalbarIndex;
     // window.GCHVmessage; 
     
+    // used to adjust the width of the sticky-block after the grade center loads/reloads
     function GCHVwait(){
         var waitOnElement = frames[1].$('table1_container').children[GCHVhorizontalbarIndex];
         if(typeof waitOnElement !== "undefined" && waitOnElement.children.length > 0){
