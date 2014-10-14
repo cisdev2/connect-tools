@@ -1,91 +1,48 @@
-/*
-List of globals:
-window.RVroot;
-window.RVmessage
-window.RVmessageLoading
-window.RVmessageDone
-window.RVmessageHide
-window.RVdetails
-window.RVrender
-window.RVgetreleases
-*/
-
 (function(){
     
     // see if we are in frame mode or not
     window.RVroot = (frames.length == 0) ? window : frames[1];
 
+    if(RVroot.$('releaseviewinit') != null) {
+        return;
+    }
+    
     // get the detail <divs>
     window.RVdetails = RVroot.document.getElementsByClassName('details');
-
-    // Create the notification area for use later on
-    if(typeof RVmessage === 'undefined') {
-        window.RVmessage = document.createElement('p');
-        RVmessage.style.background = "#e6a640";
-        RVmessage.style.padding = "5px";
-        RVmessage.style.color = "#000";
-        RVmessage.style.display = "none";
-        RVmessage.style.fontSize = "15px";
-        RVmessage.id = 'releaseviewinit';
-    }
-
-    // sets the notification area to loading
-    function RVmessageLoading() {
-        RVroot.$('pageTitleText').appendChild(RVmessage);
-        RVmessage.style.display = "block";
-        RVmessage.innerHTML = 'releaseView Loading';
+    
+    // Create a new loading message (used for each item)
+    function createRVloading() {
+        var rvmessage = document.createElement('p');
+        rvmessage.style.background = "#f4e4ce";
+        rvmessage.style.padding = "5px";
+        rvmessage.style.color = "#000";
+        rvmessage.style.fontSize = "15px";
+        rvmessage.innerHTML = 'releaseView Loading';
         var loadingImage = document.createElement('img');
         loadingImage.setAttribute('src','/images/ci/misc/progress/progress_learningSystem.gif');
-        RVmessage.appendChild(loadingImage);
-    }
-
-    // sets the notification area to done
-    function RVmessageDone() {
-        var temp = RVroot.$$('.smallCell input');
-        for(var j = 0; j<temp.length; j++) {
-            temp[j].remove();
-        }
-        temp = RVroot.$$('#listContainer_selectAll');
-        for(var j = 0; j<temp.length; j++) {
-            temp[j].remove();
-        }
-    
-        RVroot.$('pageTitleText').appendChild(RVmessage);
-        RVmessage.style.display = "block";
-        RVmessage.innerHTML = 'releaseView Activated';
-    }
-
-    //sets the notification area to a hidden state
-    function RVmessageHide() {
-        RVroot.$('pageTitleText').appendChild(RVmessage);
-        RVmessage.style.display = "none";
+        rvmessage.appendChild(loadingImage);
+        return rvmessage;
     }
 
     // function that starts displaying all the releases
     function RVrender() {
         var courseID = RVroot.contentList.courseId;
-        var numreleases = 0;
         for(var i = 0;i<RVdetails.length;i++) {
-            numreleases += 1;
-        }
-        if(numreleases==0) {
-            RVmessageDone();
-            return;
-        }
-        for(var i = 0;i<RVdetails.length;i++) {
-            numreleases -= 1;
             var contentID = RVdetails[i].parentNode.getElementsByClassName('item clearfix')[0].getAttribute('id');
-            if(numreleases==0) {
-                RVgetreleases(contentID,courseID,RVdetails[i],RVmessageDone);
-            } else {
-                RVgetreleases(contentID,courseID,RVdetails[i],null); //dummy call
-            }
+            var newloader = createRVloading();
+            RVdetails[i].parentNode.appendChild(newloader);
+            RVgetreleases(contentID,courseID,RVdetails[i],newloader);
         }
-        
     }
 
+    function removeAllFromArray(targetArray) {
+        for(var j = 0; j<targetArray.length; j++) {
+                targetArray[j].remove();
+        }
+    }
+    
     // function that gets the release data from Connect and writes it
-    function RVgetreleases(contentID,courseID,node,callback) {
+    function RVgetreleases(contentID,courseID,node,loader) {
         
         var baseURL = "/webapps/blackboard/content/listRules.jsp?";
         var parameters = "course_id="+courseID+"&"+"content_id="+contentID;
@@ -95,9 +52,9 @@ window.RVgetreleases
         xmlhttp.onreadystatechange=function() {if (xmlhttp.readyState===4 && xmlhttp.status===200){
             availDetails.innerHTML = xmlhttp.responseText;
 
+            // strip out the table from the HTML response and prepare it for viewing
             availDetails.innerHTML = availDetails.select('#the_form')[0].outerHTML;
-            console.log('1');
-            availDetails.innerHTML.replace("Create Rule", "coming soon"); console.log('2');
+            availDetails.innerHTML = availDetails.innerHTML.replace("Click <b>Create Rule</b> to add a rule.", "");
             availDetails.style.background = "#f4e4ce";
             availDetails.style.padding = "5px";
             node.appendChild(availDetails);
@@ -105,7 +62,7 @@ window.RVgetreleases
             availDetails.classList.add('releaseviewlist');
             
             var rulelinks = RVroot.$$('#'+contentID+'.releaseviewlist .contextMenuContainer a.cmimg.editmode.jsInit');
-            
+            //add [edit] links for all the rules
             for(var j = 0;j < rulelinks.length; j++) {
                 var ruleid = rulelinks[j].parentElement.parentElement.parentElement.children[0].children[0].value;
                 var url = 'https://connect.ubc.ca/webapps/blackboard/execute/content/adaptiveReleaseCriteria?';
@@ -117,9 +74,14 @@ window.RVgetreleases
                 rulelinks[j].remove();
             }
             
-            if(callback!=null) {
-                callback();
-            }
+            //hide the loading animation and all the non-relevant ui
+            loader.hide();
+            removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_nav_batch_top'));
+            removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_nav_batch_bot'));
+            removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_pagingcontrols'));
+            removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist .smallCell input'));
+            removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_selectAll'));
+            
         }};
         
         xmlhttp.open("GET",baseURL+parameters,true);
@@ -127,8 +89,17 @@ window.RVgetreleases
     }
     
     
-    //activate
-    RVmessageLoading();
+    // activate - create message
+    window.RVactivated = document.createElement('p');
+    RVactivated.style.background = "#e6a640";
+    RVactivated.style.padding = "5px";
+    RVactivated.style.color = "#000";
+    RVactivated.style.fontSize = "15px";
+    RVactivated.id = 'releaseviewinit';
+    RVactivated.innerHTML = 'releaseView Activated';
+    RVroot.$('pageTitleText').appendChild(RVactivated);
+    
+    // activate - start requests
     RVrender();
     
 })();
