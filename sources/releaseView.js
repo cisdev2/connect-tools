@@ -26,7 +26,7 @@
 
     // function that starts displaying all the releases
     function RVrender() {
-        var courseID = RVroot.contentList.courseId;
+        var courseID = RVroot.course_id;
         for(var i = 0;i<RVdetails.length;i++) {
             var contentID = RVdetails[i].parentNode.getElementsByClassName('item clearfix')[0].getAttribute('id');
             var newloader = createRVloading();
