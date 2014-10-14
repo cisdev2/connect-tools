@@ -66,23 +66,19 @@ window.RVgetreleases
         var courseID = RVroot.contentList.courseId;
         var numreleases = 0;
         for(var i = 0;i<RVdetails.length;i++) {
-            if(RVdetails[i].innerHTML.indexOf('Adaptive Release')!==-1) {
-                numreleases += 1;
-            }
+            numreleases += 1;
         }
         if(numreleases==0) {
             RVmessageDone();
             return;
         }
         for(var i = 0;i<RVdetails.length;i++) {
-            if(RVdetails[i].innerHTML.indexOf('Adaptive Release')!==-1) {
-                numreleases -= 1;
-                var contentID = RVdetails[i].parentNode.getElementsByClassName('item clearfix')[0].getAttribute('id');
-                if(numreleases==0) {
-                    RVgetreleases(contentID,courseID,RVdetails[i],RVmessageDone);
-                } else {
-                    RVgetreleases(contentID,courseID,RVdetails[i],null); //dummy call
-                }
+            numreleases -= 1;
+            var contentID = RVdetails[i].parentNode.getElementsByClassName('item clearfix')[0].getAttribute('id');
+            if(numreleases==0) {
+                RVgetreleases(contentID,courseID,RVdetails[i],RVmessageDone);
+            } else {
+                RVgetreleases(contentID,courseID,RVdetails[i],null); //dummy call
             }
         }
         
@@ -98,7 +94,12 @@ window.RVgetreleases
         var availDetails = document.createElement('div'); 
         xmlhttp.onreadystatechange=function() {if (xmlhttp.readyState===4 && xmlhttp.status===200){
             availDetails.innerHTML = xmlhttp.responseText;
-            availDetails.innerHTML = availDetails.select('#listContainer_datatable')[0].outerHTML;
+
+            availDetails.innerHTML = availDetails.select('#the_form')[0].outerHTML;
+            console.log('1');
+            availDetails.innerHTML.replace("Create Rule", "coming soon"); console.log('2');
+            availDetails.style.background = "#f4e4ce";
+            availDetails.style.padding = "5px";
             node.appendChild(availDetails);
             availDetails.id = contentID;
             availDetails.classList.add('releaseviewlist');
@@ -112,8 +113,8 @@ window.RVgetreleases
                 var newlink = document.createElement('a');
                 newlink.setAttribute('href',url);
                 newlink.innerHTML = "[Edit]";
-                rulelinks[0].parentElement.appendChild(newlink);
-                rulelinks[0].remove();
+                rulelinks[j].parentElement.appendChild(newlink);
+                rulelinks[j].remove();
             }
             
             if(callback!=null) {
