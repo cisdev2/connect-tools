@@ -13,7 +13,9 @@
             waitOnElement.style.zIndex = '2000';
             waitOnElement.style.left = 'auto';
             waitOnElement.style.marginLeft = '360px';
-            frames[1].$('panelcellInfoPanel').style.maxWidth = frames[1].$('table1_header').getWidth() + 'px';
+            var pcipMaxWidth = frames[1].$('table1_header').getWidth();
+            frames[1].$('panelcellInfoPanel').style.maxWidth = pcipMaxWidth + 'px';
+            waitOnElement.style.maxWidth =  pcipMaxWidth - 360 + 'px';
         } else {
             setTimeout(function(){
                 GCHVwait();
