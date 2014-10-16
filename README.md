@@ -1,7 +1,7 @@
 # Connect Tools
 Javascript bookmarklets to help with using Blackboard Connect.
 
-For more information and to install, visit: http://gondek.github.io/connect-tools
+For more information and to install, visit the Centre for Instructional Support website.
 
 ## Technical Notes
 To turn any of the source .js files into a bookmarklet:
