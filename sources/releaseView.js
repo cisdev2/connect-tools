@@ -47,8 +47,49 @@
         var baseURL = "/webapps/blackboard/content/listRules.jsp?";
         var parameters = "course_id="+courseID+"&"+"content_id="+contentID;
 
+        // variables for adaptive release info
         var xmlhttp=new XMLHttpRequest(); 
         var availDetails = document.createElement('div'); 
+        
+        // variables for due date info
+        var baseURL2 = "/webapps/assignment/uploadAssignment?";
+        var parameters2 = "content_id="+contentID+"&"+"course_id="+courseID
+        var xmlhttp2 =new XMLHttpRequest(); 
+        var duedate = document.createElement('div'); 
+        
+        // get due date info
+        xmlhttp2.onreadystatechange=function() {
+            console.log(xmlhttp2.readyState+ ",,," + xmlhttp2.status);
+            if (xmlhttp2.readyState===4 && xmlhttp2.status===200){
+                duedate.innerHTML = xmlhttp2.responseText;
+                
+                // strip out the meta block from the HTML response and prepare it for viewing
+                var duedatediv = duedate.select('#metadata .noLabelField')[0];
+                duedatediv.style.float = "none";
+                duedate.innerHTML = duedatediv.outerHTML;
+                if(duedate.innerHTML.indexOf('Due Date') > -1) {
+                    // this thing actually has a due date
+                } else {
+                    duedate.innerHTML = "No due date";
+                }
+            
+                //var clearfix = document.createElement('div'); 
+                //clearfix.style.clear = "both";
+                //duedate.appendChild(clearfix);
+                availDetails.appendChild(duedate);
+                loader.hide();
+            } else {
+                setTimeout(function(){
+                    if(duedate.innerHTML.length == 0) {
+                        duedate.innerHTML = "No due date";
+                        availDetails.appendChild(duedate);
+                    }
+                    loader.hide();
+                },3000);
+            }
+        }
+        
+        // get adaptive info
         xmlhttp.onreadystatechange=function() {if (xmlhttp.readyState===4 && xmlhttp.status===200){
             availDetails.innerHTML = xmlhttp.responseText;
 
@@ -74,16 +115,19 @@
                 rulelinks[j].remove();
             }
             
-            //hide the loading animation and all the non-relevant ui
-            loader.hide();
+            // hide all the non-relevant ui
             removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_nav_batch_top'));
             removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_nav_batch_bot'));
             removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_pagingcontrols'));
             removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist .smallCell input'));
             removeAllFromArray(RVroot.$$('#'+contentID+'.releaseviewlist #listContainer_selectAll'));
             
+            // start the due date
+            xmlhttp2.open("GET",baseURL2+parameters2,true);
+            xmlhttp2.send();  
         }};
         
+        // activate requests
         xmlhttp.open("GET",baseURL+parameters,true);
         xmlhttp.send();  
     }
