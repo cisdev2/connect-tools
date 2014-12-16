@@ -69,6 +69,12 @@
                 duedate.innerHTML = duedatediv.outerHTML;
                 if(duedate.innerHTML.indexOf('Due Date') > -1) {
                     // this thing actually has a due date
+                    var url = 'https://connect.ubc.ca/webapps/blackboard/execute/manageAssignment?method=showmodify&';
+                    url = url + 'course_id='+courseID+'&content_id='+contentID;
+                    var newlink = document.createElement('a');
+                    newlink.setAttribute('href',url);
+                    newlink.innerHTML = "[Edit Due Date]";
+                    duedate.appendChild(newlink);
                 } else {
                     duedate.innerHTML = "No due date";
                 }
