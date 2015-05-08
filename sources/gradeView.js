@@ -92,7 +92,7 @@
         
         //Attach an unLoad event to avoid the glitch when coming back to the grade center
         //this is a copy of the else case from below, but without the reloadGrid call
-        $('table1').addEventListener('load',function(event) {
+        window.onbeforeunload = function(event) {
             Gradebook.getModel().minimumRows=window.GCHVminRows;
             Gradebook.getModel().gradebookService.updateNumFrozenColumns(2);
             frames.theGradeCenter.reloadGrid = window.GCHVPreloadGridFn;
@@ -112,7 +112,7 @@
             
             GCHVmessage.id = '';
             GCHVmessage.style.display = 'none';
-        });
+        };
         
         GCHVmessage.id = 'gradeviewinit';
         GCHVmessage.style.display = 'inline';
